@@ -1,2 +1,2 @@
 flask==2.3.3
-git+https://github.com/awslabs/aws-serverless-wsgi.git
+aws-serverless-wsgi==1.7.6
