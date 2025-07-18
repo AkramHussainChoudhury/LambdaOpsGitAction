@@ -1,18 +1,26 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+Description: Flask + awsgi Lambda function with native requirements install
+
+Globals:
+  Function:
+    Runtime: python3.9
+    Timeout: 10
+    Architectures:
+      - x86_64
 
 Resources:
   FlaskFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: app.lambda_handler
-      Runtime: python3.9
       CodeUri: .
-      MemorySize: 512
-      Timeout: 30
+      Handler: app.handler
+      Runtime: python3.9
       Events:
-        FlaskApi:
+        Api:
           Type: Api
           Properties:
             Path: /greet
             Method: get
+      Policies:
+        - AWSLambdaBasicExecutionRole

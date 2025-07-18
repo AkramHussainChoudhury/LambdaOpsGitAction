@@ -1,4 +1,5 @@
 from flask import Flask,jsonify,request
+import awsgi
 
 app = Flask(__name__)
 
@@ -9,5 +10,5 @@ def greet():
 
 
 
-def lambda_handler(event, context):
-    return aws_serverless_wsgi.handle_request(app, event, context)
+def handler(event, context):
+    return awsgi.response(app, event, context)

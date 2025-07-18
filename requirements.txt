@@ -1,2 +1,2 @@
-flask==2.3.3
-aws-serverless-wsgi==1.7.6
+flask
+awsgi
