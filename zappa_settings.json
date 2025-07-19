@@ -1,0 +1,17 @@
+{
+    "dev": {
+        "app_function": "app.app",
+        "exclude": [
+            "boto3",
+            "dateutil",
+            "botocore",
+            "s3transfer",
+            "concurrent"
+        ],
+        "profile_name": null,
+        "aws_region": "ap-southeast-2",
+        "project_name": "lambdaopsgitact",
+        "runtime": "python3.9",
+        "s3_bucket": "zappa-r3dm1489f"
+    }
+}

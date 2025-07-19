@@ -1,16 +1,20 @@
-name: Deploy Flask Lambda
+name: Deploy Flask App with Zappa
 
 on:
   push:
     branches:
-      - main  # change if needed
+      - main  # or your deployment branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      AWS_DEFAULT_REGION: ap-southeast-2
+      STAGE: dev
+
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -18,35 +22,22 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Install AWS SAM CLI
-        uses: aws-actions/setup-sam@v2
-        with:
-          version: 1.126.0
+      - name: Create virtualenv and install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install zappa
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-southeast-2  # or your region
+          aws-region: ap-southeast-2
 
-      - name: Install dependencies into .aws-sam/build directory
+      - name: Deploy with Zappa
         run: |
-          mkdir -p .aws-sam/build/FlaskFunction
-          pip install -r requirements.txt -t .aws-sam/build/FlaskFunction
-
-      - name: Copy app and template
-        run: |
-          cp app.py .aws-sam/build/FlaskFunction/
-          cp template.yaml .aws-sam/build/template.yaml
-
-      - name: Deploy with SAM
-        run: |
-          sam deploy \
-            --template-file .aws-sam/build/template.yaml \
-            --stack-name flask-lambda-awsgi \
-            --capabilities CAPABILITY_IAM \
-            --resolve-s3 \
-            --region ap-southeast-2 \
-            --no-confirm-changeset \
-            --no-fail-on-empty-changeset
+          source venv/bin/activate
+          zappa deploy $STAGE
