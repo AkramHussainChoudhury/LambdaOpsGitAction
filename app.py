@@ -11,4 +11,6 @@ def greet():
 
 
 def handler(event, context):
-    return awsgi.response(app, event, context)
+    response = awsgi.handle(app, event, context)
+    print(f"Returning response: {response}") # Log the outgoing response
+    return response
