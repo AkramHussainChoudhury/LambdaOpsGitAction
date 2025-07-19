@@ -1,2 +1,2 @@
 flask
-awsgi
+awsgi==0.3.0
