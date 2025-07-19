@@ -13,7 +13,7 @@ Resources:
   FlaskFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
+      CodeUri: FlaskFunction
       Handler: app.handler
       Runtime: python3.9
       Events:
